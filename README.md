@@ -1,6 +1,6 @@
 # Upcloudify
 
-TODO: Write a gem description
+Upcloudify simplifies the process for uploading attachments to the cloud and emailing the recipient a link to that attachment.
 
 ## Installation
 
@@ -18,7 +18,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Configure the app:
+
+``` ruby
+# config/initializers/awesomeness.rb
+Upcloudify.configure do |config|
+  config.aws_secret_access_key = 'foobarbaz' # can also be ENV['AWS_SECRET_ACCESS_KEY']
+  config.aws_access_key_id  = 'hello' # can also be ENV['AWS_ACCESS_KEY_ID']
+  config.aws_directory = ''aws-directory
+end
+```
 
 ## Contributing
 
