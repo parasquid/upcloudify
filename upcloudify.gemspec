@@ -23,8 +23,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
 
-  spec.add_runtime_dependency 'gem_config'
-  spec.add_runtime_dependency 'pony'
-  spec.add_runtime_dependency 'zippy'
+  spec.add_dependency 'gem_config'
+  spec.add_dependency 'pony'
+  spec.add_dependency 'zippy'
+  spec.add_dependency 'fog'
 
 end

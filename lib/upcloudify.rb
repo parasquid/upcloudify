@@ -1,8 +1,12 @@
 require "upcloudify/version"
+require 'gem_config'
+require 'zip/zip'
+require 'zippy'
+require 'pony'
+require 'fog'
 
 module Upcloudify
   include GemConfig::Base
-  require 'zip/zip'
 
   with_configuration do
     has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
