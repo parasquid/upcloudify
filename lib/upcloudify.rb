@@ -57,7 +57,7 @@ module Upcloudify
       Pony.mail to: email,
         from: options[:from],
         subject: options[:subject],
-        body: options[:body] + file.url(expiration)
+        body: (options[:body] || '') + file.url(expiration)
 
     end
 
