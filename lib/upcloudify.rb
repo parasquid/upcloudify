@@ -4,6 +4,7 @@ require 'zip/zip'
 require 'zippy'
 require 'pony'
 require 'fog'
+require 'date'
 
 module Upcloudify
   include GemConfig::Base
@@ -45,7 +46,7 @@ module Upcloudify
       filename,
       attachment,
       options={suffix: " generated on #{Time.now.to_s}",
-        expiration: Time.now.next_month.end_of_month,
+        expiration: (Date.today + 30).to_time,
         from: 'upcloudify',
         subject: 'your file is attached',
         body: 'your report is linked '})
