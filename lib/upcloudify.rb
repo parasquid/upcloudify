@@ -35,7 +35,7 @@ module Upcloudify
       file = cloud.create(
         key: "#{filename}.zip",
         body: Zippy.new("#{filename}.csv" => data).data,
-        :public => false
+        :public => true
       )
       file
     end
