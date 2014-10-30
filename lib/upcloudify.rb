@@ -46,7 +46,7 @@ module Upcloudify
       filename,
       attachment,
       options={suffix: " generated on #{Time.now.to_s}",
-        expiration: (Date.today + 30).to_time,
+        expiration: ((Time.now + 30.days) - Time.now),
         from: 'upcloudify',
         subject: 'your file is attached',
         body: 'your report is linked '})
