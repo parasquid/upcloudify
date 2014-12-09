@@ -17,13 +17,21 @@ module Upcloudify
 
   class S3
 
-    # Internal: Connects to Amazon S3 using sored credentials
+    def initialize(options = {
+        s3_id: Upcloudify.configuration.aws_access_key_id,
+        s3_secret: Upcloudify.configuration.aws_secret_access_key
+    })
+      @id = options[:s3_id]
+      @secret = options[:s3_secret]
+    end
+
+    # Internal: Connects to Amazon S3 using stored credentials
     # Returns an object handle for the S3 bucket-directory
     def cloud
       connection = Fog::Storage.new(
         :provider                 => 'AWS',
-        :aws_secret_access_key    => Upcloudify.configuration.aws_secret_access_key,
-        :aws_access_key_id        => Upcloudify.configuration.aws_access_key_id,
+        :aws_secret_access_key    => @secret,
+        :aws_access_key_id        => @id,
       )
       directory = connection.directories.get(Upcloudify.configuration.aws_directory)
       directory.files
@@ -35,7 +43,7 @@ module Upcloudify
       file = cloud.create(
         key: "#{filename}.zip",
         body: Zippy.new("#{filename}.csv" => data).data,
-        :public => true
+        :public => false
       )
       file
     end
@@ -45,12 +53,12 @@ module Upcloudify
     def email(email,
       filename,
       attachment,
-      options={suffix: " generated on #{Time.now.to_s}",
-        expiration: ((Time.now + 30.days) - Time.now),
+      options={suffix: " generated on #{Time.now.to_s}-#{Rails.env}",
+        expiration: Time.now.next_month,
         from: 'upcloudify',
         subject: 'your file is attached',
         body: 'your report is linked '})
-      
+
       suffix = options[:suffix]
       expiration = options[:expiration]
       file = upload((filename.to_s + suffix.to_s).parameterize, attachment)
@@ -58,7 +66,7 @@ module Upcloudify
       Pony.mail to: email,
         from: options[:from],
         subject: options[:subject],
-        body: (options[:body] || '') + file.url(expiration)
+        body: (options[:body] || '') + file.url(expiration) + ' '
 
     end
 

@@ -25,7 +25,7 @@ Configure the app:
 Upcloudify.configure do |config|
   config.aws_secret_access_key = 'foobarbaz' # can also be ENV['AWS_SECRET_ACCESS_KEY']
   config.aws_access_key_id  = 'hello' # can also be ENV['AWS_ACCESS_KEY_ID']
-  config.aws_directory = ''aws-directory
+  config.aws_directory = 'aws-directory'
 end
 ```
 
