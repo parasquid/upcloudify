@@ -56,7 +56,7 @@ module Upcloudify
       filename,
       attachment,
       options = {
-        suffix: " generated on #{Time.now.to_s}-#{Rails.env}",
+        suffix: " generated on #{Time.now.to_s}",
         expiration: Time.now.tomorrow,
         from: 'upcloudify',
         subject: 'your file is attached',
