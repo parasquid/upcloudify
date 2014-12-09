@@ -19,10 +19,12 @@ module Upcloudify
 
     def initialize(options = {
         s3_id: Upcloudify.configuration.aws_access_key_id,
-        s3_secret: Upcloudify.configuration.aws_secret_access_key
+        s3_secret: Upcloudify.configuration.aws_secret_access_key,
+        s3_directory: Upcloudify.configuration.aws_directory
     })
       @id = options[:s3_id]
       @secret = options[:s3_secret]
+      @directory = options[:s3_directory]
     end
 
     # Internal: Connects to Amazon S3 using stored credentials
@@ -33,7 +35,7 @@ module Upcloudify
         :aws_secret_access_key    => @secret,
         :aws_access_key_id        => @id,
       )
-      directory = connection.directories.get(Upcloudify.configuration.aws_directory)
+      directory = connection.directories.get(@directory)
       directory.files
     end
 
@@ -42,7 +44,7 @@ module Upcloudify
     def upload(filename, data)
       file = cloud.create(
         key: "#{filename}.zip",
-        body: Zippy.new("#{filename}.csv" => data).data,
+        body: Zippy.new("#{filename}" => data).data,
         :public => false
       )
       file
@@ -50,20 +52,23 @@ module Upcloudify
 
     # Public: Uploads a file to S3 and emails a link to the file.
     # Returns nothing.
-    def email(email,
+    def email(email_address,
       filename,
       attachment,
-      options={suffix: " generated on #{Time.now.to_s}-#{Rails.env}",
-        expiration: Time.now.next_month,
+      options = {
+        suffix: " generated on #{Time.now.to_s}-#{Rails.env}",
+        expiration: Time.now.tomorrow,
         from: 'upcloudify',
         subject: 'your file is attached',
-        body: 'your report is linked '})
+        body: 'your report is linked '
+      }
+    )
 
       suffix = options[:suffix]
       expiration = options[:expiration]
       file = upload((filename.to_s + suffix.to_s).parameterize, attachment)
 
-      Pony.mail to: email,
+      Pony.mail to: email_address,
         from: options[:from],
         subject: options[:subject],
         body: (options[:body] || '') + file.url(expiration) + ' '
