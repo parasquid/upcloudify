@@ -29,6 +29,31 @@ Upcloudify.configure do |config|
 end
 ```
 
+Then, anywhere you want to upload a file and email a link:
+
+``` ruby
+uploader.email(params["email"], params["file"]["filename"], params["file"]["tempfile"])
+```
+
+You can also pass in an options hash to further customize the email links:
+``` ruby
+  options = {
+    suffix: " generated on #{Time.now.to_s}",
+    expiration: Time.now.tomorrow,
+    from: 'upcloudify',
+    subject: 'your file is attached',
+    body: 'your report is linked '
+  }
+```
+
+## Sample App
+
+There's a sample Sinatra app in the sample_app directory of this gem. To run:
+
+``` bash
+bundle exec ruby sample.rb
+```
+
 ## Contributing
 
 1. Fork it
