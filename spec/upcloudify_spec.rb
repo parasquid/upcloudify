@@ -1,4 +1,5 @@
 require 'spec_helper.rb'
+require 'pry'
 require 'upcloudify'
 
 describe Upcloudify::S3 do
