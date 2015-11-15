@@ -46,6 +46,9 @@ module Upcloudify
     # Uploads data into Amazon S3
     # Returns an object representing the uploaded file
     def upload(filename, data)
+      filename.gsub!(/\//, '-') # replace slashes with dashes
+      filename.gsub!(/^\-|\-$/, '') # remove leading and trailing dashes
+
       file = cloud.create(
         :key    => "#{filename}.zip",
         :body   => Zippy.new("#{filename}" => data).data,
