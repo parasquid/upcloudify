@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
                           attachments to the cloud and emailing the recipient
                           a link to that attachment}
   spec.summary       = %q{Upload a file to the cloud and email a link for the attachment}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/parasquid/upcloudify"
   spec.license       = "LGPLv3"
 
   spec.files         = `git ls-files`.split($/)
@@ -23,6 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "pry"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "guard-rspec"
 
   spec.add_dependency 'gem_config'
   spec.add_dependency 'pony'
