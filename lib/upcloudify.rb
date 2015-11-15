@@ -56,7 +56,7 @@ module Upcloudify
       filename,
       attachment,
       options = {
-        suffix: " generated on #{Time.now.to_s}",
+        suffix: "",
         expiration: Time.now.tomorrow,
         from: 'upcloudify',
         subject: 'your file is attached',
@@ -66,7 +66,7 @@ module Upcloudify
 
       suffix = options[:suffix]
       expiration = options[:expiration]
-      file = upload((filename.to_s + suffix.to_s).parameterize, attachment)
+      file = upload((filename.to_s + suffix.to_s), attachment)
 
       Pony.mail to: email_address,
         from: options[:from],
