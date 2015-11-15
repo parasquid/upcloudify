@@ -43,8 +43,8 @@ module Upcloudify
     # Returns an object representing the uploaded file
     def upload(filename, data)
       file = cloud.create(
-        key: "#{filename}.zip",
-        body: Zippy.new("#{filename}" => data).data,
+        :key    => "#{filename}.zip",
+        :body   => Zippy.new("#{filename}" => data).data,
         :public => false
       )
       file
