@@ -27,7 +27,7 @@ module Upcloudify
       @directory = options[:s3_directory]
     end
 
-    # Internal: Connects to Amazon S3 using stored credentials
+    # Connects to Amazon S3 using stored credentials
     # Returns an object handle for the S3 bucket-directory
     def cloud
       connection = Fog::Storage.new(
@@ -39,7 +39,7 @@ module Upcloudify
       directory.files
     end
 
-    # Internal: Uploads data into Amazon S3
+    # Uploads data into Amazon S3
     # Returns an object representing the uploaded file
     def upload(filename, data)
       file = cloud.create(
@@ -50,7 +50,7 @@ module Upcloudify
       file
     end
 
-    # Public: Uploads a file to S3 and emails a link to the file.
+    # Uploads a file to S3 and emails a link to the file.
     # Returns nothing.
     def email(email_address,
       filename,
