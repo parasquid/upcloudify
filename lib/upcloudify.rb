@@ -1,4 +1,5 @@
 require "upcloudify/version"
+require "monkey_patches"
 require 'gem_config'
 require 'zip/zip'
 require 'zippy'
@@ -10,31 +11,34 @@ module Upcloudify
   include GemConfig::Base
 
   with_configuration do
-    has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
     has :aws_access_key_id, default: ENV['AWS_ACCESS_KEY_ID']
+    has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
     has :aws_directory
   end
 
   class S3
 
     def initialize(options = {
-        s3_id: Upcloudify.configuration.aws_access_key_id,
-        s3_secret: Upcloudify.configuration.aws_secret_access_key,
-        s3_directory: Upcloudify.configuration.aws_directory
+        aws_access_key_id: Upcloudify.configuration.aws_access_key_id,
+        aws_secret_access_key: Upcloudify.configuration.aws_secret_access_key,
+        aws_directory: Upcloudify.configuration.aws_directory
     })
-      @id = options[:s3_id]
-      @secret = options[:s3_secret]
-      @directory = options[:s3_directory]
+      raise ArgumentError, "aws_access_key_id is required" unless options[:aws_access_key_id]
+      raise ArgumentError, "aws_secret_access_key is required" unless options[:aws_secret_access_key]
+      raise ArgumentError, "aws_directory is required" unless options[:aws_directory]
+      @id = options[:aws_access_key_id]
+      @secret = options[:aws_secret_access_key]
+      @directory = options[:aws_directory]
     end
 
     # Connects to Amazon S3 using stored credentials
     # Returns an object handle for the S3 bucket-directory
-    def cloud
-      connection = Fog::Storage.new(
+    def cloud(connection = Fog::Storage.new(
         :provider                 => 'AWS',
         :aws_secret_access_key    => @secret,
         :aws_access_key_id        => @id,
       )
+    )
       directory = connection.directories.get(@directory)
       directory.files
     end
