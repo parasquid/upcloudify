@@ -1,5 +1,4 @@
 require "upcloudify/version"
-require "monkey_patches"
 require 'gem_config'
 require 'zip/zip'
 require 'zippy'
@@ -64,7 +63,7 @@ module Upcloudify
       attachment,
       options = {
         suffix: "",
-        expiration: Time.now.tomorrow,
+        expiration: Date.today + 7,
         from: 'upcloudify',
         subject: 'your file is attached',
         body: 'your report is linked '

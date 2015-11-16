@@ -31,6 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'zippy'
   spec.add_dependency 'zip-zip'
   spec.add_dependency 'fog'
-  spec.add_dependency 'activesupport'
 
 end
