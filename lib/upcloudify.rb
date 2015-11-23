@@ -63,7 +63,7 @@ module Upcloudify
       attachment,
       options = {
         suffix: "",
-        expiration: Date.today + 7,
+        expiration: (Date.today + 7).to_time,
         from: 'upcloudify',
         subject: 'your file is attached',
         body: 'your report is linked '
