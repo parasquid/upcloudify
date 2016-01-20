@@ -5,6 +5,7 @@ require 'zippy'
 require 'pony'
 require 'fog'
 require 'date'
+require 'slack_incoming_webhook'
 
 module Upcloudify
   include GemConfig::Base
@@ -78,6 +79,24 @@ module Upcloudify
         from: options[:from],
         subject: options[:subject],
         body: (options[:body] || '') + file.url(expiration) + ' '
+
+    end
+
+    # Uploads a file to S3 and sends a slack link to the file.
+    # Returns nothing.
+    def slack(nickname, filename,
+      options = {
+        expiration: (Date.today + 7).to_time,
+        from: 'upcloudify',
+        body: 'your file is here '
+      }
+    )
+
+      expiration = options[:expiration]
+      file = upload((filename.to_s + suffix.to_s), attachment)
+
+      SlackIncomingWebhook.notify to: nickname,
+        body: options[:body] + file.url(expiration)
 
     end
 
