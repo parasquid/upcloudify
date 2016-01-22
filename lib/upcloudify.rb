@@ -5,7 +5,6 @@ require 'zippy'
 require 'pony'
 require 'fog'
 require 'date'
-require 'slack_incoming_webhook'
 
 module Upcloudify
   include GemConfig::Base
@@ -21,7 +20,7 @@ module Upcloudify
     def initialize(options = {
         aws_access_key_id: Upcloudify.configuration.aws_access_key_id,
         aws_secret_access_key: Upcloudify.configuration.aws_secret_access_key,
-        aws_directory: Upcloudify.configuration.aws_directory
+        aws_directory: Upcloudify.configuration.aws_directory,
     })
       raise ArgumentError, "aws_access_key_id is required" unless options[:aws_access_key_id]
       raise ArgumentError, "aws_secret_access_key is required" unless options[:aws_secret_access_key]
@@ -79,24 +78,6 @@ module Upcloudify
         from: options[:from],
         subject: options[:subject],
         body: (options[:body] || '') + file.url(expiration) + ' '
-
-    end
-
-    # Uploads a file to S3 and sends a slack link to the file.
-    # Returns nothing.
-    def slack(nickname, filename,
-      options = {
-        expiration: (Date.today + 7).to_time,
-        from: 'upcloudify',
-        body: 'your file is here '
-      }
-    )
-
-      expiration = options[:expiration]
-      file = upload((filename.to_s + suffix.to_s), attachment)
-
-      SlackIncomingWebhook.notify to: nickname,
-        body: options[:body] + file.url(expiration)
 
     end
 

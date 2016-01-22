@@ -18,6 +18,8 @@ Or install it yourself as:
 
 ## Usage
 
+Version 0.3 started using required named parameters and so will only run on Ruby version 2.2 and higher.
+
 Configure the app:
 
 ``` ruby

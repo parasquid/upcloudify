@@ -1,0 +1,5 @@
+uploader = Upcloudify.new(aws_options)
+slack_notifier = SlackNotifier.new(to: ["@parasquid", "#uploads"], token: token)
+email_notifier = EmailNotifier.new(to: [receiver1, receiver2])
+
+uploader.upload_and_notify(filename, attachment, message: message, notifier: [slack_notifier, email_notifier])
