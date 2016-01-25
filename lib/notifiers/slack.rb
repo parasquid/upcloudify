@@ -3,12 +3,20 @@ module Upcloudify
     class Slack
       require "httparty"
 
-      def initialize(to:, url:)
+      def initialize(to:, url:, text: "hello!", username: "upcloudify")
         @url = url
+        @text = text
       end
 
       def notify
-        HTTParty.post(@url, headers: {"Content-Type" => content_type})
+        HTTParty.post(
+          @url,
+          headers: {"Content-Type" => content_type}
+        )
+      end
+
+      def payload
+        { text: @text }
       end
 
       private

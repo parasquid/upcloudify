@@ -18,6 +18,7 @@ describe Upcloudify::Notifiers::Slack do
       When { instance.notify }
       Then { expect(slack_api_stub).to have_been_requested }
     end
+
     context "the content type is application/json" do
       Given!(:slack_api_stub) {
         stub_request(:post, slack_api_url).
@@ -25,6 +26,15 @@ describe Upcloudify::Notifiers::Slack do
       }
       When { instance.notify }
       Then { expect(slack_api_stub).to have_been_requested }
+    end
+  end
+
+  describe "payload" do
+    context "the payload contains the text" do
+      Given(:instance) { klass.new(to: [recipient_1, recipient_2], url: slack_api_url, text: "abc") }
+      When(:payload) { instance.payload }
+      Then { payload != nil }
+      Then { expect(payload).to include(text: "abc") }
     end
   end
 end
