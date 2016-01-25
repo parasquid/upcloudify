@@ -1,4 +1,6 @@
 require "upcloudify/version"
+require "notifiers/slack"
+
 require 'gem_config'
 require 'zip/zip'
 require 'zippy'
