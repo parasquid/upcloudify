@@ -11,7 +11,8 @@ module Upcloudify
       def notify
         HTTParty.post(
           @url,
-          headers: {"Content-Type" => content_type}
+          headers: {"Content-Type" => content_type},
+          body: payload.to_json
         )
       end
 
