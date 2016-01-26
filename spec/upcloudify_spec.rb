@@ -44,4 +44,23 @@ describe Upcloudify::S3 do
       expect(subject.cloud(connection)).to eq files
     end
   end
+
+  context "uploads a file and notifies the user" do
+    Given(:aws_options) {
+      {
+        aws_secret_access_key: 'test_key',
+        aws_access_key_id: 'test_id',
+        aws_directory: 'test_directory'
+      }
+    }
+    Given(:klass) { Upcloudify::S3 }
+    Given(:instance) { klass.new(aws_options) }
+    Given(:notifier) { double("notifier") }
+    When { expect(notifier).to receive(:notify) }
+    Then {
+      expect {
+        instance.upload_and_notify(notifier: notifier, filename: 'abc', attachment: '123')
+      }.not_to raise_error
+    }
+  end
 end

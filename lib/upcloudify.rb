@@ -83,6 +83,10 @@ module Upcloudify
 
     end
 
+    def upload_and_notify(notifier:, filename:, attachment:)
+      notifier.notify
+    end
+
   end
 
 end

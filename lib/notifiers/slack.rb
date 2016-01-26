@@ -3,9 +3,10 @@ module Upcloudify
     class Slack
       require "httparty"
 
-      def initialize(to:, url:, text: "hello!", username: "upcloudify")
+      def initialize(to: nil, url:, text: "hello!")
         @url = url
         @text = text
+        @to = to
       end
 
       def notify
@@ -17,7 +18,7 @@ module Upcloudify
       end
 
       def payload
-        { text: @text }
+        { text: @text, channel: @to }
       end
 
       private
