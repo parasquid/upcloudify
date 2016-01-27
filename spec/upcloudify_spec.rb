@@ -48,18 +48,46 @@ end
 
 describe Upcloudify do
   describe ".upload_and_notify" do
-    Given(:klass) { Upcloudify }
-    Given(:notifier) { double("notifier") }
+    Given(:test_file_class) {
+      class TestFile
+        def url(expiration)
+          "filename link"
+        end
+      end
+      TestFile
+    }
+    Given(:test_file) { test_file_class.new }
     Given(:uploader) { double("uploader") }
+    Given { allow(uploader).to receive(:upload).and_return(test_file) }
+    Given(:notifier) { double("notifier") }
+    Given(:klass) { Upcloudify }
     Given(:instance) { klass.new(uploader: uploader, notifier: notifier) }
-    context "notifies the user" do
+    context "notifications" do
       Given { expect(uploader).to receive(:upload) }
-      When { expect(notifier).to receive(:notify) }
-      Then {
-        expect {
-          instance.upload_and_notify(filename: 'abc', attachment: '123')
-        }.not_to raise_error
-      }
+      context "notifies the user" do
+        When { expect(notifier).to receive(:notify) }
+        Then {
+          expect {
+            instance.upload_and_notify(filename: 'abc', attachment: '123')
+          }.not_to raise_error
+        }
+      end
+      context "the notification has a custom message" do
+        When { expect(notifier).to receive(:notify).with({text: "hi"}) }
+        Then {
+          expect {
+            instance.upload_and_notify(filename: 'abc', attachment: '123', message: "hi")
+          }.not_to raise_error
+        }
+      end
+      context "the notification can merge the file url" do
+        When { expect(notifier).to receive(:notify).with({text: "your report <filename link>"}) }
+        Then {
+          expect {
+            instance.upload_and_notify(filename: 'abc', attachment: '123', message: "your report <%s>")
+          }.not_to raise_error
+        }
+      end
     end
     context "uploads the file" do
       Given { allow(notifier).to receive(:notify) }

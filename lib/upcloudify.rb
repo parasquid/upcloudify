@@ -15,9 +15,10 @@ class Upcloudify
     @notifier = notifier
   end
 
-  def upload_and_notify(filename:, attachment:)
-    @uploader.upload(filename, attachment)
-    @notifier.notify
+  def upload_and_notify(filename:, attachment:, message: "%s")
+    expiration = (Date.today + 7).to_time
+    file = @uploader.upload(filename, attachment)
+    @notifier.notify(text: message % file.url(expiration))
   end
 
   class S3
