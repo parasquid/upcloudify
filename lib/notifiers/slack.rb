@@ -1,4 +1,4 @@
-module Upcloudify
+class Upcloudify
   module Notifiers
     class Slack
       require "httparty"

@@ -8,16 +8,24 @@ require 'pony'
 require 'fog'
 require 'date'
 
-module Upcloudify
-  include GemConfig::Base
+class Upcloudify
 
-  with_configuration do
-    has :aws_access_key_id, default: ENV['AWS_ACCESS_KEY_ID']
-    has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
-    has :aws_directory
+  def initialize(notifier:)
+    @notifier = notifier
+  end
+
+  def upload_and_notify(filename:, attachment:)
+    @notifier.notify
   end
 
   class S3
+
+    include GemConfig::Base
+    with_configuration do
+      has :aws_access_key_id, default: ENV['AWS_ACCESS_KEY_ID']
+      has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
+      has :aws_directory
+    end
 
     def initialize(options = {
         aws_access_key_id: Upcloudify.configuration.aws_access_key_id,
@@ -82,11 +90,6 @@ module Upcloudify
         body: (options[:body] || '') + file.url(expiration) + ' '
 
     end
-
-    def upload_and_notify(notifier:, filename:, attachment:)
-      notifier.notify
-    end
-
   end
 
 end
