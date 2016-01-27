@@ -26,15 +26,22 @@ describe Upcloudify::Notifiers::Slack do
       When { instance.notify }
       Then { expect(slack_api_stub).to have_been_requested }
     end
+
+    context "a custom message can be sent for the notification" do
+      Given!(:slack_api_stub) {
+        stub_request(:post, slack_api_url).
+          with(
+            headers: {"Content-Type" => "application/json"},
+            body: { text: "abc", channel: recipient }
+          )
+      }
+      When { instance.notify(text: "abc") }
+      Then { expect(slack_api_stub).to have_been_requested }
+    end
   end
 
   describe "payload" do
-    Given(:instance) { klass.new(to: recipient, url: slack_api_url, text: "abc") }
-    context "the payload contains the text" do
-      When(:payload) { instance.payload }
-      Then { expect(payload).to include(text: "abc") }
-    end
-
+    Given(:instance) { klass.new(to: recipient, url: slack_api_url) }
     context "the payload contains the username to be notified" do
       When(:payload) { instance.payload }
       Then { expect(payload).to include(channel: recipient) }

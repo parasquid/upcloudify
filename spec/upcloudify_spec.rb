@@ -50,8 +50,10 @@ describe Upcloudify do
   describe ".upload_and_notify" do
     Given(:klass) { Upcloudify }
     Given(:notifier) { double("notifier") }
-    Given(:instance) { klass.new(notifier: notifier) }
+    Given(:uploader) { double("uploader") }
+    Given(:instance) { klass.new(uploader: uploader, notifier: notifier) }
     context "notifies the user" do
+      Given { expect(uploader).to receive(:upload) }
       When { expect(notifier).to receive(:notify) }
       Then {
         expect {
@@ -61,8 +63,12 @@ describe Upcloudify do
     end
     context "uploads the file" do
       Given { allow(notifier).to receive(:notify) }
-      When { instance.upload_and_notify(filename: 'abc', attachment: '123') }
-      Then {  }
+      When { expect(uploader).to receive(:upload) }
+      Then {
+        expect {
+          instance.upload_and_notify(filename: 'abc', attachment: '123')
+        }.not_to raise_error
+      }
     end
   end
 

@@ -3,22 +3,21 @@ class Upcloudify
     class Slack
       require "httparty"
 
-      def initialize(to: nil, url:, text: "hello!")
+      def initialize(to: nil, url:)
         @url = url
-        @text = text
         @to = to
       end
 
-      def notify
+      def notify(text: nil)
         HTTParty.post(
           @url,
           headers: {"Content-Type" => content_type},
-          body: payload.to_json
+          body: payload.merge(text: text).to_json
         )
       end
 
       def payload
-        { text: @text, channel: @to }
+        { channel: @to }
       end
 
       private

@@ -10,11 +10,13 @@ require 'date'
 
 class Upcloudify
 
-  def initialize(notifier:)
+  def initialize(uploader:, notifier:)
+    @uploader = uploader
     @notifier = notifier
   end
 
   def upload_and_notify(filename:, attachment:)
+    @uploader.upload(filename, attachment)
     @notifier.notify
   end
 
