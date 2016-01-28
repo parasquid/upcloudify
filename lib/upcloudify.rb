@@ -1,4 +1,6 @@
 require "upcloudify/version"
+require "notifiers/slack"
+
 require 'gem_config'
 require 'zip/zip'
 require 'zippy'
@@ -6,21 +8,32 @@ require 'pony'
 require 'fog'
 require 'date'
 
-module Upcloudify
-  include GemConfig::Base
+class Upcloudify
 
-  with_configuration do
-    has :aws_access_key_id, default: ENV['AWS_ACCESS_KEY_ID']
-    has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
-    has :aws_directory
+  def initialize(uploader:, notifier:)
+    @uploader = uploader
+    @notifier = notifier
+  end
+
+  def upload_and_notify(filename:, attachment:, message: "%s")
+    expiration = (Date.today + 7).to_time
+    file = @uploader.upload(filename, attachment)
+    @notifier.notify(text: message % file.url(expiration))
   end
 
   class S3
 
+    include GemConfig::Base
+    with_configuration do
+      has :aws_access_key_id, default: ENV['AWS_ACCESS_KEY_ID']
+      has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
+      has :aws_directory
+    end
+
     def initialize(options = {
         aws_access_key_id: Upcloudify.configuration.aws_access_key_id,
         aws_secret_access_key: Upcloudify.configuration.aws_secret_access_key,
-        aws_directory: Upcloudify.configuration.aws_directory
+        aws_directory: Upcloudify.configuration.aws_directory,
     })
       raise ArgumentError, "aws_access_key_id is required" unless options[:aws_access_key_id]
       raise ArgumentError, "aws_secret_access_key is required" unless options[:aws_secret_access_key]
@@ -80,7 +93,6 @@ module Upcloudify
         body: (options[:body] || '') + file.url(expiration) + ' '
 
     end
-
   end
 
 end

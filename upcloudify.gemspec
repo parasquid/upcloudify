@@ -25,11 +25,14 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard-rspec"
+  spec.add_development_dependency "rspec-given"
+  spec.add_development_dependency "webmock"
 
   spec.add_dependency 'gem_config'
   spec.add_dependency 'pony'
   spec.add_dependency 'zippy'
   spec.add_dependency 'zip-zip'
   spec.add_dependency 'fog'
+  spec.add_dependency 'httparty'
 
 end

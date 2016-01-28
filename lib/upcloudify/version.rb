@@ -1,3 +1,3 @@
-module Upcloudify
-  VERSION = "0.2.1"
+class Upcloudify
+  VERSION = "0.3"
 end
