@@ -31,9 +31,9 @@ class Upcloudify
     end
 
     def initialize(options = {
-        aws_access_key_id: Upcloudify.configuration.aws_access_key_id,
-        aws_secret_access_key: Upcloudify.configuration.aws_secret_access_key,
-        aws_directory: Upcloudify.configuration.aws_directory,
+        aws_access_key_id: Upcloudify::S3.configuration.aws_access_key_id,
+        aws_secret_access_key: Upcloudify::S3.configuration.aws_secret_access_key,
+        aws_directory: Upcloudify::S3.configuration.aws_directory,
     })
       raise ArgumentError, "aws_access_key_id is required" unless options[:aws_access_key_id]
       raise ArgumentError, "aws_secret_access_key is required" unless options[:aws_secret_access_key]
