@@ -1,9 +1,12 @@
+require "json"
+
 class Upcloudify
   module Notifiers
     class Slack
       require "httparty"
 
-      def initialize(to: nil, url:)
+      def initialize(to: nil, url: nil)
+        raise ArgumentError "url cannot be nil" unless url
         @url = url
         @to = to
       end

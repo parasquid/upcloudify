@@ -18,13 +18,11 @@ Or install it yourself as:
 
 ## Usage
 
-Version 0.3 started using required named parameters and so will only run on Ruby version 2.2 and higher.
-
 Configure the app:
 
 ``` ruby
 # config/initializers/awesomeness.rb
-Upcloudify.configure do |config|
+Upcloudify::S3.configure do |config|
   config.aws_secret_access_key = 'foobarbaz' # can also be ENV['AWS_SECRET_ACCESS_KEY']
   config.aws_access_key_id  = 'hello' # can also be ENV['AWS_ACCESS_KEY_ID']
   config.aws_directory = 'aws-directory'

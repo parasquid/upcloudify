@@ -10,12 +10,17 @@ require 'date'
 
 class Upcloudify
 
-  def initialize(uploader:, notifier:)
+  def initialize(uploader: nil, notifier: nil)
+    raise ArgumentError "uploader cannot be nil" unless uploader
+    raise ArgumentError "notifier cannot be nil" unless notifier
     @uploader = uploader
     @notifier = notifier
   end
 
-  def upload_and_notify(filename:, attachment:, message: "%s")
+  def upload_and_notify(filename: nil, attachment: nil, message: "%s")
+    raise ArgumentError "filename cannot be nil" unless filename
+    raise ArgumentError "attachment cannot be nil" unless attachment
+
     expiration = (Date.today + 7).to_time
     file = @uploader.upload(filename, attachment)
     @notifier.notify(text: message % file.url(expiration))
