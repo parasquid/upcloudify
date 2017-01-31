@@ -33,12 +33,14 @@ class Upcloudify
       has :aws_access_key_id, default: ENV['AWS_ACCESS_KEY_ID']
       has :aws_secret_access_key, default: ENV['AWS_SECRET_ACCESS_KEY']
       has :aws_directory
+      has :aws_region, default: "us-east-1"
     end
 
     def initialize(options = {
-        aws_access_key_id: Upcloudify.configuration.aws_access_key_id,
-        aws_secret_access_key: Upcloudify.configuration.aws_secret_access_key,
-        aws_directory: Upcloudify.configuration.aws_directory,
+        aws_access_key_id: Upcloudify::S3.configuration.aws_access_key_id,
+        aws_secret_access_key: Upcloudify::S3.configuration.aws_secret_access_key,
+        aws_directory: Upcloudify::S3.configuration.aws_directory,
+        aws_region: Upcloudify::S3.configuration.aws_region
     })
       raise ArgumentError, "aws_access_key_id is required" unless options[:aws_access_key_id]
       raise ArgumentError, "aws_secret_access_key is required" unless options[:aws_secret_access_key]
@@ -46,6 +48,7 @@ class Upcloudify
       @id = options[:aws_access_key_id]
       @secret = options[:aws_secret_access_key]
       @directory = options[:aws_directory]
+      @region = options[:aws_region]
     end
 
     # Connects to Amazon S3 using stored credentials
@@ -54,6 +57,7 @@ class Upcloudify
         :provider                 => 'AWS',
         :aws_secret_access_key    => @secret,
         :aws_access_key_id        => @id,
+        :region                   => @region
       )
     )
       directory = connection.directories.get(@directory)
